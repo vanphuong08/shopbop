@@ -1,0 +1,183 @@
+﻿@{
+    //load file layout vao day
+    Layout = "~/Views/Shared/_LayoutTrangChu.cshtml";
+}
+@using aspnet12_project.Models
+@* su dung DataTable, DataRow *@
+@using System.Data
+@* su dung class Database *@
+@using aspnet12_project.Areas.Admin.Class
+@functions{
+    //khai bao doi tuong thao tac csdl
+    DataContext db = new DataContext();
+    //lay cac san pham noi bat
+    public List<Product> HotProducts()
+    {
+        //Skip(0).Take(6) -> tu ban ghi thu 0, lay 6 ban ghi <=> select TOP 6 from tenbang
+        List<Product> listProduct = db.Products.Where(tbl => tbl.hot == 1).OrderByDescending(tbl => tbl.id).Skip(0).Take(6).ToList();
+        return listProduct;
+    }
+    //lay cac danh muc co san pham ben trong
+    public DataTable GetCatogires()
+    {
+        DataTable dt = Database.ListDataTable("select id, name from Categories where id in (select category_id from Products where Categories.id=Products.category_id)");
+        return dt;
+    }
+    //lay 6 san pham thuoc danh muc
+    public List<Product> Products(int _category_id)
+    {
+        List<Product> listProduct = db.Products.Where(tbl => tbl.category_id == _category_id).OrderByDescending(tbl => tbl.id).Skip(0).Take(6).ToList();
+        return listProduct;
+    }
+    //lay 6 bai tin noi bat
+    public List<News> HotNews()
+    {
+        //Skip(0).Take(6) -> tu ban ghi thu 0, lay 6 ban ghi <=> select TOP 6 from tenbang
+        List<News> listNews = db.News.Where(tbl => tbl.hot == 1).OrderByDescending(tbl => tbl.id).Skip(0).Take(6).ToList();
+        return listNews;
+    }
+}
+<div class="col-xs-12 col-md-12">
+    <!-- main -->
+
+    <div class="special-collection">
+        <div class="tabs-container">
+            <div class="row" style="margin-top:10px;">
+                <div class="col-lg-10">
+                    <h2>HOT PRODUCT</h2>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="tabs-content row">
+            <div id="content-tabb1" class="content-tab content-tab-proindex" style="display:none">
+                <div class="clearfix">
+                    @{
+                        List<Product> hotProducts = HotProducts();
+                    }
+                    @foreach (Product item in hotProducts)
+                    {
+                        <!-- box product -->
+                        <div class="col-xs-6 col-md-2 col-sm-6" style="position:relative;">
+                            <a href="/Product/WishList/@item.id" style="position:absolute; right:20px; top:5px;"><span class="fa fa-heart"></span></a>
+                            <div class="product-grid" id="product-1168979" style="height: 350px; overflow: hidden;">
+                                <div class="image"> <a href="/Product/Detail/@item.id"><img src="~/Assets/Upload/Products/@item.photo" title="@item.name" alt="@item.name" class="img-responsive"></a> </div>
+                                <div class="info">
+                                    <h3 class="name"><a href="/Product/Detail/@item.id">@item.name</a></h3>
+                                    <p class="price-box"> <span class="special-price"> <span class="price product-price" style="text-decoration:line-through;"> @string.Format("{0:N0}", item.price)</span> ₫ </span> </p>
+                                    <p class="price-box"> <span class="special-price"> <span class="price product-price"> @string.Format("{0:N0}", item.price - (item.price * item.discount) / 100) </span>₫ </span> </p>
+                                    <p class="price-box">
+                                        <a href="/Product/Rating/@item.id?star=1"><img src="~/Assets/Frontend/images/star.jpg"></a>
+                                        <a href="/Product/Rating/@item.id?star=2"><img src="~/Assets/Frontend/images/star.jpg"></a>
+                                        <a href="/Product/Rating/@item.id?star=3"><img src="~/Assets/Frontend/images/star.jpg"></a>
+                                        <a href="/Product/Rating/@item.id?star=4"><img src="~/Assets/Frontend/images/star.jpg"></a>
+                                        <a href="/Product/Rating/@item.id?star=5"><img src="~/Assets/Frontend/images/star.jpg"></a>
+                                    </p>
+                                    <div class="action-btn">
+                                        <form>
+                                            <a href="/Cart/Add/@item.id" class="button">Add to Cart</a>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end box product -->
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-12"> <img src="~/Assets/Frontend/images/adv1.jpg" class="img-thumbnail"> </div>
+    </div>
+    @{
+        DataTable dtCategories = GetCatogires();
+    }
+    @foreach (DataRow itemCategory in dtCategories.Rows)
+    {
+        <!-- category product -->
+        <div class="special-collection">
+            <div class="tabs-container">
+                <div class="row" style="margin-top:10px;">
+                    <div class="head-tabs head-tab1 col-lg-11">
+                        <h2>@itemCategory["name"]</h2>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="tabs-content row">
+                <div id="content-taba4" class="content-tab content-tab-proindex">
+
+                    @{
+                        List<Product> products = Products(Convert.ToInt32(itemCategory["id"]));
+                    }
+                    @foreach (Product item in products)
+                    {
+                        <!-- box product -->
+                        <div class="col-xs-6 col-md-2 col-sm-6 ">
+                            <div class="product-grid" id="product-1168979" style="height: 350px; overflow: hidden;">
+                                <div class="image"> <a href="/Product/Detail/@item.id"><img src="~/Assets/Upload/Products/@item.photo" title="@item.name" alt="@item.name" class="img-responsive"></a> </div>
+                                <div class="info">
+                                    <h3 class="name"><a href="/Product/Detail/@item.id">@item.name</a></h3>
+                                    <p class="price-box"> <span class="special-price"> <span class="price product-price" style="text-decoration:line-through;"> @string.Format("{0:C}", item.price)</span> ₫ </span> </p>
+                                    <p class="price-box"> <span class="special-price"> <span class="price product-price"> @string.Format("{0:C}", item.price - (item.price * item.discount) / 100) </span>₫ </span> </p>
+                                    <p class="price-box">
+                                        @if (this.Session["customer_id"] != null)
+                                        {
+                                            <a href="/Product/Rating/@item.id?star=1"><img src="~/Assets/Frontend/images/star.jpg"></a>
+                                            <a href="/Product/Rating/@item.id?star=2"><img src="~/Assets/Frontend/images/star.jpg"></a>
+                                            <a href="/Product/Rating/@item.id?star=3"><img src="~/Assets/Frontend/images/star.jpg"></a>
+                                            <a href="/Product/Rating/@item.id?star=4"><img src="~/Assets/Frontend/images/star.jpg"></a>
+                                            <a href="/Product/Rating/@item.id?star=5"><img src="~/Assets/Frontend/images/star.jpg"></a>
+                                        }
+                                    </p>
+                                    <div class="action-btn">
+                                        <form>
+                                            <a href="/Cart/Add/@item.id" class="button">Add to Cart</a>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end box product -->
+                    }
+
+                </div>
+            </div>
+        </div>
+        <!-- /category product -->
+    }
+    <!-- adv -->
+    <div class="widebanner"> <a href="#"><img src="~/Assets/Frontend/100/047/633/themes/517833/assets/widebanner221b.jpg?1481775169361" alt="#" class="img-responsive"></a> </div>
+    <!-- end adv -->
+    <!-- hot news -->
+    <div class="home-blog">
+        <h2 class="title"> <span>Tin tức</span></h2>
+        <div class="row">
+            <div class="owl-home-blog owl-home-blog-bottompage">
+                @{
+                    List<News> hotNews = HotNews();
+                }
+                @foreach (News item in hotNews)
+                {
+                    <!-- new item -->
+                    <div class="item">
+                        <div class="article">
+                            <a href="/News/Detail/@item.id" class="image">
+                                <img src="~/Assets/Upload/News/@item.photo" style="height:200px;" alt="@item.name" title="@item.name" class="img-responsive">
+                            </a>
+                            <div class="info">
+                                <h3><a class="text3line" href="/News/Detail/@item.id" style="font-weight: bold;">@item.name</a></h3>
+                                <p class="desc">@Html.Raw(item.description)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /news item -->
+                }
+            </div>
+        </div>
+    </div>
+    <!-- /hotnews -->
+    <!-- end main -->
+</div>

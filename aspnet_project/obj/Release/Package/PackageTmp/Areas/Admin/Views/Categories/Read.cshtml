@@ -1,0 +1,63 @@
+﻿@{
+    //load file _Layout.cshtml vao day
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@using aspnet12_project.Models
+@* khai bao kieu du lieu cho bien Model (bien nay truyen tu controller ra) *@
+@model PagedList.IPagedList<Category>
+@* dong nay de khai bao ham PagedListPager vao doi tuong Html *@
+@using PagedList.Mvc
+@*tao ham bang tag sau*@
+@functions{ 
+    public DataContext db = new DataContext();
+    public List<Category> getSubCategories(int _id)
+    {
+        List<Category> listRecord = db.Categories.Where(tbl => tbl.parent_id == _id).ToList();
+        return listRecord != null ? listRecord : new List<Category>();
+    }
+}
+<div class="col-md-12">
+    <div style="margin-bottom:5px;">
+        <a href="/Admin/Categories/Create" class="btn btn-primary">Add category</a>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">List cateogry</div>
+        <div class="panel-body">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>Name</th>
+                    <th style="width:100px;"></th>
+                </tr>
+                @foreach (Category item in Model)
+                {
+                    <tr>
+                        <td>@item.name</td>
+                        <td style="text-align:center;">
+                            <a href="/Admin/Categories/Update/@item.id">Edit</a>&nbsp;
+                            <a href="/Admin/Categories/Delete/@item.id" onclick="return window.confirm('Are you sure?');">Delete</a>
+                        </td>
+                    </tr>
+                    List<Category> listSubRecord = getSubCategories(item.id);
+                    foreach (Category itemSub in listSubRecord)
+                    {
+                        <tr>
+                            <td style="padding-left:40px;">@itemSub.name</td>
+                            <td style="text-align:center;">
+                                <a href="/Admin/Categories/Update/@itemSub.id">Edit</a>&nbsp;
+                                <a href="/Admin/Categories/Delete/@itemSub.id" onclick="return window.confirm('Are you sure?');">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+            <style type="text/css">
+                .pagination {
+                    padding: 0px;
+                    margin: 0px;
+                }
+            </style>
+            @Html.PagedListPager(Model, page => Url.Action("Read", new { page }))
+        </div>
+    </div>
+</div>
+<!-- end content -->

@@ -1,0 +1,199 @@
+﻿@{
+    //load file _Layout.cshtml vao day
+    Layout = "~/Views/Shared/_LayoutDetail.cshtml";
+}
+@using aspnet12_project.Models
+@using System.Data
+@using aspnet12_project.Areas.Admin.Class
+@functions{
+    public DataContext db = new DataContext();
+    //lay cac anh thuoc san pham nay trong bang ProductsImages
+    public DataTable GetImages(int _product_id)
+    {
+        DataTable dt = Database.ListDataTable("select * from ProductsImages where product_id=" + _product_id);
+        return dt;
+    }
+    //lay ten danh muc
+    public string GetCategoryName(int _id)
+    {
+        //lay mot ban ghi
+        Category record = db.Categories.Where(tbl => tbl.id == _id).FirstOrDefault();
+        try
+        {
+            return record.name;
+        }
+        catch { return ""; }
+    }
+    //lay so luong rating
+    public int GetRating(int _product_id, int _star)
+    {
+        int _NumStar = db.Ratings.Where(tbl => tbl.product_id == _product_id && tbl.star == _star).Count();
+        return _NumStar;
+    }
+}
+<h1 itemprop="name">@Model.name</h1>
+<div class="product-detail" itemscope itemtype="http://schema.org/Product">
+    <div class="top">
+        <div class="row">
+            <div class="col-xs-12 col-md-6 product-image">
+                <div class="featured-image">
+                    <img src="~/Assets/Upload/Products/@Model.photo" style="width: 100%;" class="img-responsive" />
+                </div>
+                <div class="box-image">
+                    <ul>
+                        @{
+                            //lay danh sach cac anh thuoc san pham nay
+                            DataTable listRecord = GetImages(Model.id);
+                            int i = 0;
+                        }
+
+                        @foreach (DataRow item in listRecord.Rows)
+                        {
+                            @*i++;
+            <li><img src="~/Assets/Upload/ProductsImages/@item["photo"]" style="width:60px;" id="img-@i"></li>*@
+                        @*<div class="item-owl owl-carousel">
+                            <div>*@
+                                @*<a class="fancybox-thumb" rel="fancybox-thumb">*@
+                            i++;
+                                    <img src="~/Assets/Upload/ProductsImages/@item["photo"]" class="fancybox-thumb" rel="fancybox-thumb"  id="img-@i" style="width:60px;"  alt="" />
+                                @*</a>*@
+                            @*</div>
+                        </div>*@
+
+
+
+                                }
+                           
+                        </ul>
+                </div>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        //---
+                        $("#img-1").click(function () {
+                            $(".featured-image img").fadeOut(function () {
+                                //lay duong dan cua id=img-1
+                                var srcImg = $("#img-1").attr("src");
+                                $(".featured-image img").attr("src", srcImg);
+                                $(".featured-image img").fadeIn();
+                            });
+                        });
+                        //---
+                        //---
+                        $("#img-2").click(function () {
+                            $(".featured-image img").fadeOut(function () {
+                                //lay duong dan cua id=img-2
+                                var srcImg = $("#img-2").attr("src");
+                                $(".featured-image img").attr("src", srcImg);
+                                $(".featured-image img").fadeIn();
+                            });
+                        });
+                        //---
+                        //---
+                        $("#img-3").click(function () {
+                            $(".featured-image img").fadeOut(function () {
+                                //lay duong dan cua id=img-3
+                                var srcImg = $("#img-3").attr("src");
+                                $(".featured-image img").attr("src", srcImg);
+                                $(".featured-image img").fadeIn();
+                            });
+                        });
+                        //---
+                        //---
+                        $("#img-4").click(function () {
+                            $(".featured-image img").fadeOut(function () {
+                                //lay duong dan cua id=img-4
+                                var srcImg = $("#img-4").attr("src");
+                                $(".featured-image img").attr("src", srcImg);
+                                $(".featured-image img").fadeIn();
+                            });
+                        });
+                        //---
+                        //---
+                        $("#img-5").click(function () {
+                            $(".featured-image img").fadeOut(function () {
+                                //lay duong dan cua id=img-5
+                                var srcImg = $("#img-5").attr("src");
+                                $(".featured-image img").attr("src", srcImg);
+                                $(".featured-image img").fadeIn();
+                            });
+                        });
+                        //---
+                        //---
+                        $("#img-6").click(function () {
+                            $(".featured-image img").fadeOut(function () {
+                                //lay duong dan cua id=img-6
+                                var srcImg = $("#img-6").attr("src");
+                                $(".featured-image img").attr("src", srcImg);
+                                $(".featured-image img").fadeIn();
+                            });
+                        });
+                        //---
+                    });
+                </script>
+                <style type="text/css">
+                    .box-image ul {
+                        padding: 0px;
+                        margin: 0px;
+                        list-style: none;
+                    }
+
+                        .box-image ul li {
+                            display: inline;
+                            margin-right: 10px;
+                        }
+
+                    .box-image img {
+                        width: 50px;
+                        border: 1px solid #dddddd;
+                        margin-bottom: 10px;
+                        cursor: pointer;
+                    }
+                </style>
+            </div>
+            <div class="col-xs-12 col-md-6 info" style="font-size:16px;">
+
+                <p class="vendor"> Bận đang xem sản phầm: &nbsp; <span> @GetCategoryName(Model.category_id) </span></p>
+                <p itemprop="price" class="price-box product-price-box"> <span class="special-price"> <span class="price product-price" style="text-decoration:line-through;"> @string.Format("{0:N0}", Model.price)₫ </span></span></p>
+                <p itemprop="price" class="price-box product-price-box"> <span class="special-price"> <span class="price product-price"> @string.Format("{0:N0}", Model.price - (Model.price * Model.discount) / 100)₫ </span></span></p>
+                <a href="/Cart/Add/@Model.id" class="btn btn-primary">Cho vào giỏ hàng</a>
+                <!-- rating -->
+                <div style="border:1px solid #dddddd; margin-top: 15px;">
+                    <h4 style="padding-left: 10px;">Rating</h4>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="width: 80%; padding-left: 10px;"><img src="~/Assets/Frontend/images/star.jpg"></td>
+                            <td><span class="label label-primary"><i class="fas fa-star"></i> vote</span></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 80%; padding-left: 10px;"><img src="~/Assets/Frontend/images/star.jpg"> <img src="~/Assets/Frontend/images/star.jpg"></td>
+                            <td><span class="label label-warning">@GetRating(Model.id, 2) vote</span></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 80%; padding-left: 10px;"><img src="~/Assets/Frontend/images/star.jpg"> <img src="~/Assets/Frontend/images/star.jpg"> <img src="~/Assets/Frontend/images/star.jpg"></td>
+                            <td><span class="label label-danger">@GetRating(Model.id, 3) vote</span></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 80%; padding-left: 10px;"><img src="~/Assets/Frontend/images/star.jpg"> <img src="~/Assets/Frontend/images/star.jpg"> <img src="~/Assets/Frontend/images/star.jpg"> <img src="~/Assets/Frontend/images/star.jpg"></td>
+                            <td><span class="label label-info">@GetRating(Model.id, 4) vote</span></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 80%; padding-left: 10px;"><img src="~/Assets/Frontend/images/star.jpg"> <img src="~/Assets/Frontend/images/star.jpg"> <img src="~/Assets/Frontend/images/star.jpg"> <img src="~/Assets/Frontend/images/star.jpg"> <img src="~/Assets/Frontend/images/star.jpg"></td>
+                            <td><span class="label label-success">@GetRating(Model.id, 5) vote</span></td>
+                        </tr>
+                    </table>
+                    <br>
+                </div>
+                <!-- /rating -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="middle">
+    <!-- chi tiet -->
+    @Html.Raw(Model.description)
+    @Html.Raw(Model.content)
+    <!-- chi tiet -->
+</div>
+<div class="fb-comments" data-href="https://www.facebook.com/vanphuong02" data-numposts="5" data-width=""></div>

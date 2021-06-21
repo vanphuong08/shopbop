@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>VAN || PHUONG</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="~/Assets/Frontend/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/style.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/Log.css" type="text/css">
+
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+    <div id="fb-root"></div>
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/5fa76ea00a68960861bcbee8/default';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v8.0" nonce="ZLkgUsl3"></script>
+
+    <!-- ... -->
+    <!-- Header Section Begin -->
+    @Html.Partial("~/Views/Shared/_Header.cshtml")
+    <!-- Header Section End -->
+    <!-- Hero Section Begin -->
+    @RenderBody()
+    <!-- Latest Product Section End -->
+    <!-- Blog Section Begin -->
+    <!-- Blog Section End -->
+    <!-- Footer Section Begin -->
+
+    @Html.Partial("~/Views/Shared/_Footer.cshtml")
+    @Html.Partial("~/Views/Shared/_Ontop.cshtml")
+
+    <!-- Footer Section End -->
+    <!-- Js Plugins -->
+    <script src="~/Assets/Frontend/js/jquery-3.3.1.min.js"></script>
+    <script src="~/Assets/Frontend/js/bootstrap.min.js"></script>
+    <script src="~/Assets/Frontend/js/jquery.nice-select.min.js"></script>
+    <script src="~/Assets/Frontend/js/jquery-ui.min.js"></script>
+    <script src="~/Assets/Frontend/js/jquery.slicknav.js"></script>
+    <script src="~/Assets/Frontend/js/mixitup.min.js"></script>
+    <script src="~/Assets/Frontend/js/owl.carousel.min.js"></script>
+    <script src="~/Assets/Frontend/js/main.js"></script>
+    <script src="~/Assets/Frontend/js/Log.js"></script>
+
+
+
+</body>
+
+</html>

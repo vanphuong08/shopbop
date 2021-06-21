@@ -1,0 +1,51 @@
+﻿@{
+    //load file _Layout.cshtml vao day
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="col-md-12">
+    @if (Request.QueryString["notify"] != null && Request.QueryString["notify"] == "emailExists")
+    {
+        <div class="alert alert-danger">Email đã tồn tại!</div>
+    }
+    <div class="panel panel-primary">
+        <div class="panel-heading">Add edit user</div>
+        <div class="panel-body">
+            <form method="post" action="">
+                @* dat tinh nang bao mat cho website *@
+                @Html.AntiForgeryToken()
+                <!-- rows -->
+                <div class="row" style="margin-top:5px;">
+                    <div class="col-md-2">Name</div>
+                    <div class="col-md-10">
+                        <input type="text" value="@if(Model != null){<text>@Model.name</text>}" name="name" class="form-control" required>
+                    </div>
+                </div>
+                <!-- end rows -->
+                <!-- rows -->
+                <div class="row" style="margin-top:5px;">
+                    <div class="col-md-2">Email</div>
+                    <div class="col-md-10">
+                        <input type="email" value="@if(Model != null){<text>@Model.email</text>}" name="email" class="form-control">
+                    </div>
+                </div>
+                <!-- end rows -->
+                <!-- rows -->
+                <div class="row" style="margin-top:5px;">
+                    <div class="col-md-2">Password</div>
+                    <div class="col-md-10">
+                        <input type="password" name="password" @if (Model != null) { <text> placeholder="Nhập password nếu muốn đổi" </text>  } else { <text> required</text> } class="form-control">
+                    </div>
+                </div>
+                <!-- end rows -->
+                <!-- rows -->
+                <div class="row" style="margin-top:5px;">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-10">
+                        <input type="submit" value="Process" class="btn btn-primary">
+                    </div>
+                </div>
+                <!-- end rows -->
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+﻿@{
+    //load file layout vao day
+    Layout = "~/Views/Shared/_LayoutTrangTrong.cshtml";
+}
+@using aspnet12_project.Models
+@* su dung DataTable, DataRow *@
+@using System.Data
+@* su dung class Database *@
+@using aspnet12_project.Areas.Admin.Class
+@functions{
+    //khai bao doi tuong thao tac csdl
+    DataContext db = new DataContext();
+    //lay 6 bai tin tiep theo
+    public List<News> OtherNews(int _id)
+    {        
+        //Skip(0).Take(6) -> tu ban ghi thu 0, lay 6 ban ghi <=> select TOP 6 from tenbang
+        List<News> listNews = db.News.Where(tbl => tbl.id < _id).OrderByDescending(tbl => tbl.id).Skip(0).Take(6).ToList();
+        return listNews;
+    }
+}
+
+<div class="template-customer" >
+    <h1>Tin tức</h1>
+    <div class="row">
+        <div class="col-md-9">
+            <h4>@Model.name</h4>
+            @*<div><img src="~/Assets/Upload/News/@Model.photo" style="width:100%;" /></div>*@
+            <div style="margin-top:10px;">@Html.Raw(Model.description)</div>
+            <div style="margin-top:10px;">@Html.Raw(Model.content)</div>
+        </div>
+    </div>
+    <!-- hot news -->
+    <div class="home-blog">
+        <h2 class="title"> <span>Tin tức</span></h2>
+        <div class="row">
+            <div class="owl-home-blog owl-home-blog-bottompage">
+                @{
+                    List<News> otherNews = OtherNews(Model.id);
+                }
+                @foreach (News item in otherNews)
+                {
+                    <!-- new item -->
+                    <div class="item">
+                        <div class="article">
+                            <a href="/News/Detail/@item.id" class="image">
+                                <img src="~/Assets/Upload/News/@item.photo" style="height:200px;" alt="@item.name" title="@item.name" class="img-responsive">
+                            </a>
+                            <div class="info">
+                                <h3><a class="text3line" href="/News/Detail/@item.id" style="font-weight: bold;">@item.name</a></h3>
+                                @*<p class="desc">@Html.Raw(item.description)</p>*@
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /news item -->
+                }
+            </div>
+        </div>
+    </div>
+    <!-- /hotnews -->
+</div>

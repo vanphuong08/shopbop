@@ -1,0 +1,49 @@
+﻿@{
+    //load file layout vao day
+    Layout = "~/Views/Shared/_LayoutTrangTrong.cshtml";
+}
+@using aspnet12_project.Models
+@* su dung DataTable, DataRow *@
+@using System.Data
+@* su dung class Database *@
+@using aspnet12_project.Areas.Admin.Class
+
+<div class="template-cart">
+        <div class="table-responsive">
+            <table class="table table-cart">
+                <thead>
+                    <tr>
+                        <th>Ngày mua</th>
+                        <th>Giá</th>
+                        <th>Trạng thái</th>
+                        <th style="width:100px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>@item.date.ToString("dd/MM/yyyy")</td>
+                        <td>@string.Format("{0:C}", item.price)</td>
+                        <td>
+                            @if (item.status == 0)
+                            {
+                                <label class="label label-primary">Chưa giao hàng</label>
+                            }
+                            @if (item.status == 1)
+                            {
+                                <label class="label label-danger">Đang giao hàng</label>
+                            }
+                            @if (item.status == 2)
+                            {
+                                <label class="label label-success">Đã giao hàng</label>
+                            }
+                        </td>
+                        <td></td>
+                    </tr>
+                }
+                </tbody>                
+            </table>
+        </div>
+</div>
+

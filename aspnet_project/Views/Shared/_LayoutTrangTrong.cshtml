@@ -1,0 +1,126 @@
+﻿<!doctype html>
+<!--[if !IE]><!-->
+<html lang="vi">
+<!--<![endif]-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta http-equiv="content-language" content="vi" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="robots" content="noodp,index,follow" />
+    <meta name='revisit-after' content='1 days' />
+    <meta name="keywords" content="">
+    <title>Phương Dragon</title>
+    <link href='~/Assets/Frontend/100/047/633/themes/517833/assets/font-awesome.min221b.css?1481775169361' rel='stylesheet' type='text/css' />
+    <link href='~/Assets/Frontend/100/047/633/themes/517833/assets/bootstrap.min221b.css?1481775169361' rel='stylesheet' type='text/css' />
+    <link href='~/Assets/Frontend/100/047/633/themes/517833/assets/owl.carousel221b.css?1481775169361' rel='stylesheet' type='text/css' />
+    <link href='~/Assets/Frontend/100/047/633/themes/517833/assets/responsive221b.css?1481775169361' rel='stylesheet' type='text/css' />
+    <link href='~/Assets/Frontend/100/047/633/themes/517833/assets/styles.scss221b.css?1481775169361' rel='stylesheet' type='text/css' />
+    <script src='~/Assets/Frontend/100/047/633/themes/517833/assets/jquery.min221b.js?1481775169361' type='text/javascript'></script>
+    <script src='~/Assets/Frontend/100/047/633/themes/517833/assets/bootstrap.min221b.js?1481775169361' type='text/javascript'></script>
+    <script src='~/Assets/Frontend/assets/themes_support/api.jquerya87f.js?4' type='text/javascript'></script>
+    <link href='~/Assets/Frontend/100/047/633/themes/517833/assets/bw-statistics-style221b.css?1481775169361' rel='stylesheet' type='text/css' />
+
+
+    <link rel="stylesheet" href="~/Assets/Frontend/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/style.css" type="text/css">
+    <link rel="stylesheet" href="~/Assets/Frontend/css/Log.css" type="text/css">
+</head>
+<body class="index" style="font-size:16px;">
+    <div id="fb-root"></div>
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/5fa76ea00a68960861bcbee8/default';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v8.0" nonce="ZLkgUsl3"></script>
+
+    <!-- header -->
+    @* load file _Header.cshtml vao day *@
+    @Html.Partial("~/Views/Shared/_Header.cshtml")
+    <!-- end header -->
+    <div class="content">
+        <div class="container">
+            <h1 style="display:none;">DKT Store</h1>
+            <div class="row">
+                <div class="col-xs-12 col-md-3">
+                    <!-- end support -->
+                    <div class="online_support block">
+                        <div class="new_title">
+                            <h2>Hỗ trợ trực tuyến</h2>
+                        </div>
+                        <div class="block-content">
+                            <div class="sp_1">
+                                <p>Tư vấn bán hàng </p>
+                                <p>Mr. Phương: 123456789</p>
+                            </div>
+                            <div class="sp_1">
+                                <p>Email liên hệ</p>
+                                <p>vanphuong@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end support online -->
+                    <!-- box search -->
+                    <div class="panel panel-default" style="margin-top:15px;">
+                        <div class="panel-heading"> Tìm theo mức giá </div>
+                        <div class="panel-body">
+                            <ul class="list-group" style="border:0px;">
+                                <li class="list-group-item" style="border:0px;">
+                                    Giá từ &nbsp;&nbsp;
+                                    <input type="number" min="0" style="font-size:15px;" value="0" id="fromPrice" class="form-control" />
+                                </li>
+                                <li class="list-group-item" style="border:0px;">
+                                    Đến &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="number" min="0" style="font-size:15px;" value="0" id="toPrice" class="form-control" />
+                                </li>
+                                <li class="list-group-item" style="border:0px; text-align:center">
+                                    <input type="button" class="btn btn-warning" style="font-size: 16px;" value="Tìm mức giá" onclick="location.href = '/Product/SearchPrice?fromPrice=' + document.getElementById('fromPrice').value + '&toPrice=' + document.getElementById('toPrice').value;" />
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- end box search -->
+                    <!-- hot news -->
+                    <!-- end hot news -->
+                    <!-- adv -->
+                    <!-- end adv -->
+
+                </div>
+                <div class="col-xs-12 col-md-9">
+                    <!-- main -->
+                    @* do du lieu vao day *@
+                    @RenderBody()
+
+                    <!-- end main -->
+                </div>
+            </div>
+            <!-- adv -->
+
+
+        </div>
+    </div>
+
+    @Html.Partial("~/Views/Shared/_Footer.cshtml")
+
+    <script src='~/Assets/Frontend/100/047/633/themes/517833/assets/owl.carousel.min221b.js?1481775169361' type='text/javascript'></script>
+    <script src='~/Assets/Frontend/100/047/633/themes/517833/assets/responsive-menu221b.js?1481775169361' type='text/javascript'></script>
+    <script src='~/Assets/Frontend/100/047/633/themes/517833/assets/elevate-zoom221b.js?1481775169361' type='text/javascript'></script>
+    <script src='~/Assets/Frontend/100/047/633/themes/517833/assets/main221b.js?1481775169361' type='text/javascript'></script>
+    <script src='~/Assets/Frontend/100/047/633/themes/517833/assets/ajax-cart221b.js?1481775169361' type='text/javascript'></script>
+</body>
+</html>

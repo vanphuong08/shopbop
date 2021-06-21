@@ -1,0 +1,49 @@
+﻿@{
+    //load file layout vao day
+    Layout = "~/Views/Shared/_LayoutTrangTrong.cshtml";
+}
+@using aspnet12_project.Models
+@* su dung DataTable, DataRow *@
+@using System.Data
+@* su dung class Database *@
+@using aspnet12_project.Areas.Admin.Class
+
+@functions{
+    //khai bao doi tuong thao tac csdl
+    DataContext db = new DataContext();
+    public Product GetProduct(int _product_id)
+    {
+        Product record = db.Products.Where(tbl => tbl.id == _product_id).FirstOrDefault();
+        return record;
+    }
+}
+
+<div class="template-cart">
+    <div class="table-responsive">
+        <table class="table table-cart">
+            <thead>
+                <tr>
+                    <th class="image">Ảnh sản phẩm</th>
+                    <th class="name">Tên sản phẩm</th>
+                    <th class="price">Giá bán lẻ</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Session["WishListId"] != null)
+                {
+                    List<int> _WishListId = Session["WishListId"] as List<int>;
+                    foreach (var id in _WishListId)
+                    {
+                        Product item = GetProduct(id);
+                        <tr>
+                            <td><img src="~/Assets/Upload/Products/@item.photo" class="img-responsive" /></td>
+                            <td><a href="/Product/Detail/@item.id">@item.name</a></td>
+                            <td> @string.Format("{0:N0}", item.price)₫ </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

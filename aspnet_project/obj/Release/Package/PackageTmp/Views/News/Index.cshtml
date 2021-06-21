@@ -1,0 +1,34 @@
+﻿@{
+    //load file layout vao day
+    Layout = "~/Views/Shared/_LayoutTrangChu.cshtml";
+}
+@using aspnet12_project.Models
+@* khai bao kieu du lieu cho bien Model (bien nay truyen tu controller ra) *@
+@model PagedList.IPagedList<News>
+@* dong nay de khai bao ham PagedListPager vao doi tuong Html *@
+@using PagedList.Mvc
+
+<h1>Tin tức</h1>
+<div class="wrapper-blog">
+    <!-- list news -->
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 article" style="height:400px; overflow:hidden">
+                <a href="/News/Detail/@item.id" class="image">
+                    <img style="width:550px; height:300px;" src="~/Assets/Upload/News/@item.photo" alt="@item.name" title="@item.name" class="img-responsive">
+                </a>
+                <h3><a href="/News/Detail/@item.id">@item.name</a></h3>
+                @*<p class="desc">@Html.Raw(item.description)</p>*@
+            </div>
+        }
+    </div>
+    <!-- end list news -->
+    <style type="text/css">
+        .pagination {
+            padding: 0px;
+            margin: 0px;
+        }
+    </style>
+    @Html.PagedListPager(Model, page => Url.Action("Read", new { page }))
+</div>

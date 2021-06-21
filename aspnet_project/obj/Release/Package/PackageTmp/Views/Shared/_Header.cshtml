@@ -1,0 +1,196 @@
+﻿@using aspnet12_project.Models
+@functions{
+    DataContext db = new DataContext();
+    //lay danh muc cap 0
+    public List<Category> GetCategories()
+    {
+        List<Category> listRecord = db.Categories.Where(tbl => tbl.parent_id == 0).OrderByDescending(tbl => tbl.id).ToList();
+        return listRecord;
+    }
+    //lay cac danh muc cap 1
+    public List<Category> GetCategoriesSub(int _id)
+    {
+        List<Category> listRecord = db.Categories.Where(tbl => tbl.parent_id == _id).OrderByDescending(tbl => tbl.id).ToList();
+        return listRecord;
+    }
+}
+<header id="header">
+    <!-- top header -->
+    <div class="top-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6"> <span><i class="fa fa-phone"></i> (04) 6674 2332</span> <span><i class="fa fa-envelope-o"></i> <a href="mailto:support@mail.com">support@mail.com</a></span> </div>
+                @if (this.Session["customer_email"] == null)
+                {
+                    <div class="col-xs-12 col-sm-6 col-md-6 customer"> <a href="/Account/Login">Đăng nhập</a>&nbsp; &nbsp;<a href="/Account/Register">Đăng ký</a> </div>
+                }
+                else
+                {
+                    <div class="col-xs-12 col-sm-6 col-md-6 customer">
+                        <a href="#">Xin chào @this.Session["customer_email"]</a>&nbsp; &nbsp;
+                        <a href="/Orders">Đơn hàng của tôi</a>&nbsp; &nbsp;
+                        <a href="/Account/Logout">Đăng xuất</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!-- end top header -->
+    <!-- middle header -->
+    <script language="javascript">
+        function search() {
+            var _key = document.getElementById("key").value;
+            //di chuyen den mot trang khac
+            location.href = "/Product/Search?key=" + _key;
+        }
+        function searchForm() {
+            $(document).ready(function () {
+                //---
+                //lay gia tri cua textbox
+                var _key = document.getElementById("key").value;
+                //hien thi the html co class=smart-search
+                if (_key != "") {
+                    document.getElementById("smart-search").setAttribute("style", "display:block");
+                    //---
+                    $.ajax({
+                        url: "/Product/AjaxSearch?key=" + _key,
+                        success: function (result) {
+                            //alert(result);
+                            //clear cac the li trong id=smart-search
+                            $("#smart-search ul").empty();
+                            //them ket qua moi tim kiem
+                            $("#smart-search ul").append(result);
+                        }
+                    });
+                }
+                //---
+                else {
+                    document.getElementById("smart-search").setAttribute("style", "display:none");
+                }
+                //---
+            });
+        }
+    </script>
+    <div class="mid-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-3 logo "> <a href="/Home/Index"> <img src="~/Assets/Frontend/100/047/633/themes/517833/assets/logo221b.png?1481775169361" alt="DKT Store" title="DKT Store" class="img-responsive"> </a> </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 header-search">
+                    <!--<form method="post" id="frm" action="">-->
+                    @* dat lam diem tua (pisiton:relative) de khoi absolute o ben trong can theo *@
+                    <div style="margin-top:25px; position:relative;">
+                        <input type="text" onkeyup="searchForm();" autocomplete="off" value="" placeholder="Nhập từ khóa tìm kiếm..." id="key" class="input-control">
+                        <button style="margin-top:-8px;" type="button"> <i class="fa fa-search" onclick="search();"></i> </button>
+                        <div id="smart-search">
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>
+                    <style>
+                        #smart-search {
+                            position: absolute;
+                            width: 100%;
+                            background: white;
+                            margin-top: 5px;
+                            z-index: 1;
+                            display: none;
+                        }
+
+                            #smart-search img {
+                                width: 70px;
+                                border: 1px solid #dddddd;
+                                padding: 2px;
+                            }
+
+                            #smart-search ul {
+                                padding: 0px;
+                                margin: 0px;
+                                list-style: none;
+                            }
+
+                                #smart-search ul li {
+                                    margin-bottom: 5px;
+                                    display: flex
+                                }
+                    </style>
+                    <!--</form>-->
+                </div>
+                @{
+                    List<CartItem> Cart = new List<CartItem>();
+                    Cart = Session["Cart"] as List<CartItem>;
+                    int number = 0;
+                }
+                @if (this.Session["Cart"] != null)
+                {
+                    foreach (var item in Cart)
+                    {
+                        number++;
+                    }
+                }
+                <div class="col-xs-12 col-sm-12 col-md-3 mini-cart">
+                    <div class="wrapper-mini-cart">
+                        <span class="icon"><i class="fa fa-shopping-cart"></i></span> <a href="cart"> <span class="mini-cart-count"> @number </span> sản phẩm <i class="fa fa-caret-down"></i></a>
+                        <div class="content-mini-cart">
+                            <div class="has-items">
+                                <ul class="list-unstyled">
+                                    @if (this.Session["Cart"] != null)
+                                    {
+                                        foreach (var item in Cart)
+                                        {
+                                            <li class="clearfix" id="item-1853038">
+                                                <div class="image"> <a href="/Product/Detail/@item.id"> <img alt="@item.name" src="~/Assets/Upload/Products/@item.photo" title="Macbook Air 13 128GB MQD32SA/A (2017)" class="img-responsive"> </a> </div>
+                                                <div class="info">
+                                                    <h3><a href="/Product/Detail/@item.id">@item.name</a></h3>
+                                                    <p>@item.number x @string.Format("{0:N0}", item.price)₫</p>
+                                                </div>
+                                                <div> <a href="/Cart/Remove/@item.id"> <i class="fa fa-times"></i></a> </div>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                                <a href="/Cart/Checkout" class="button">Thanh toán</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end middle header -->
+        <!-- bottom header -->
+        <div class="bottom-header">
+            <div class="container">
+                <div class="clearfix">
+                    <ul class="main-nav hidden-xs hidden-sm list-unstyled">
+                        <li class="active"><a href="/Home/Index">Trang chủ</a></li>
+                        <li class="has-submenu">
+                            <a href="#"> <span>Sản phẩm</span><i class="fa fa-caret-down" style="margin-left: 5px;"></i> </a>
+                            <ul class="list-unstyled level1">
+                                @{
+                                    List<Category> listCategories = GetCategories();
+                                }
+                                @foreach (Category item in listCategories)
+                                {
+                                    <li><a href="/Product/Category/@item.id">@item.name</a></li>
+                                    List<Category> listCategoriesSub = GetCategoriesSub(item.id);
+                                    foreach (Category itemSub in listCategoriesSub)
+                                    {
+                                        <li style="padding-left:20px;"><a href="/Product/Category/@itemSub.id">@itemSub.name</a></li>
+                                    }
+                                }
+                            </ul>
+                        </li>
+                        <li><a href="/Cart">Giỏ hàng</a></li>
+                        <li><a href="/News">Tin tức</a></li>
+                        <li><a href="/Contact">Liên hệ</a></li>
+                    </ul>
+                    <a href="javascript:void(0);" class="toggle-main-menu hidden-md hidden-lg"> <i class="fa fa-bars"></i> </a>
+                    <ul class="list-unstyled mobile-main-menu hidden-md hidden-lg" style="display:none">
+                        <li class="active"><a href="/">Trang chủ</a></li>
+                        <li><a href="/News">Tin tức</a></li>
+                        <li><a href="/Contact">Liên hệ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- end bottom header -->
+</header>

@@ -1,0 +1,229 @@
+﻿@{
+    //load file layout vao day
+    Layout = "~/Views/Shared/_LayoutTrangChu.cshtml";
+}
+@using aspnet12_project.Models
+@* su dung DataTable, DataRow *@
+@using System.Data
+@* su dung class Database *@
+@using aspnet12_project.Areas.Admin.Class
+@functions{
+    //khai bao doi tuong thao tac csdl
+    DataContext db = new DataContext();
+    //lay cac san pham noi bat
+    public List<Product> HotProducts()
+    {
+        //Skip(0).Take(6) -> tu ban ghi thu 0, lay 6 ban ghi <=> select TOP 6 from tenbang
+        List<Product> listProduct = db.Products.Where(tbl => tbl.hot == 1).OrderByDescending(tbl => tbl.id).Skip(0).Take(6).ToList();
+        return listProduct;
+    }
+    //lay cac danh muc co san pham ben trong
+    public DataTable GetCatogires()
+    {
+        DataTable dt = Database.ListDataTable("select id, name from Categories where id in (select category_id from Products where Categories.id=Products.category_id)");
+        return dt;
+    }
+    //lay 6 san pham thuoc danh muc
+    public List<Product> Products(int _category_id)
+    {
+        List<Product> listProduct = db.Products.Where(tbl => tbl.category_id == _category_id).OrderByDescending(tbl => tbl.id).Skip(0).Take(8).ToList();
+        return listProduct;
+    }
+    public List<News> HotNews()
+    {
+        List<News> listNews = db.News.Where(tbl => tbl.hot == 1).OrderByDescending(tbl => tbl.id).Skip(0).Take(6).ToList();
+        return listNews;
+    }
+    public List<Product> Product(int _category_id)
+    {
+        List<Product> listProduct = db.Products.Where(tbl => tbl.category_id == 6).OrderByDescending(tbl => tbl.id).Skip(0).Take(3).ToList();
+        return listProduct;
+    }
+}
+<section class="hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="hero__search">
+                    <div class="hero__item set-bg" data-setbg="/Assets/Frontend/img/iphone5/5s.6.jpg">
+                        <div class="hero__text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="Qcao">
+                <div class="qc">
+                    <img src="/Assets/Frontend/img/bia3.jpeg" alt="">
+                </div>
+                <div class="qc2">
+                    <img src="/Assets/Frontend/img/bia4.png" alt="">
+                </div>
+            </div>
+            <div class="flao">
+                <div class="ngang">
+                    <img src="/Assets/Frontend/img/bia1.png" alt="" style="width:1300px; height:100px">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Hero Section End -->
+<!-- Categories Section Begin -->
+<section class="categories">
+    <div class="container">
+        <div class="row">
+            <div class="categories__slider owl-carousel">
+
+                <div class="col-lg-3">
+                    <div class="categories__item set-bg" data-setbg="/Assets/Frontend/img/iphone5/5.1.jpg">
+                        <h5><a href="iphone5.html">Iphone </a></h5>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="categories__item set-bg" data-setbg="/Assets/Frontend/img/iphone5/5s1.jpg">
+                        <h5><a href="iphone5.html">SamSung</a></h5>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="categories__item set-bg" data-setbg="/Assets/Frontend/img/iphone6/6.1.png">
+                        <h5><a href="iphone5.html">Oppo</a></h5>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="categories__item set-bg" data-setbg="/Assets/Frontend/img/iphone6/6s.1.png">
+                        <h5><a href="iphone5.html">Xiaomi</a></h5>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="categories__item set-bg" data-setbg="/Assets/Frontend/img/iphone6/6plus.1.jpg">
+                        <h5><a href="iphone5.html">Vivo</a></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Categories Section End -->
+<!-- Featured Section Begin -->
+<section class="featured spad">
+    @{
+        DataTable dtCategories = GetCatogires();
+    }
+    @foreach (DataRow itemCategory in dtCategories.Rows)
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h2>@itemCategory["name"]</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row featured__filter">
+                @{
+                    List<Product> products = Products(Convert.ToInt32(itemCategory["id"]));
+                }
+                @foreach (Product item in products)
+                {
+                    <div class="col-lg-3 col-md-4 col-sm-6 mix vegetables fastfood" style="position:relative;">
+                        <a href="/Product/WishList/@item.id" style="position:absolute; right:20px; top:5px;"><i class="fa fa-heart"></i>jello</a>
+                        <div class="featured__item">
+                            <div class="featured__item__pic set-bg" data-setbg="/Assets/Upload/Products/@item.photo">
+                                <ul class="featured__item__pic__hover">
+                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                    <li><a href="/Cart/Add/@item.id"><i class="fa fa-shopping-cart"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__discount__item__text">
+                                <h5><a href="/Product/Detail/@item.id">@item.name</a></h5>
+                                <div class="product__item__price"> @string.Format("{0:C}", item.price) <span>@string.Format("{0:C}", item.price - (item.price * item.discount) / 100)</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    }
+</section>
+<!-- Featured Section End -->
+<!-- Banner Begin -->
+<div class="banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="banner__pic">
+                    <a href="#"><img src="/Assets/Frontend/img/bia5.jpg"></a>
+                    <div id="banner">
+                        <h5><a href="#">Realme 6 Pro</a></h5>
+                        <div class="product__item__price">7.990.000VND</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="banner__pic">
+                    <a href="#"><img src="/Assets/Frontend/img/bia6.jpg"></a>
+                    <div id="banner">
+                        <h5><a href="#">Realme 6 Pro</a></h5>
+                        <div class="product__item__price">7.990.000VND</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Banner End -->
+<!-- Latest Product Section Begin -->
+<section class="latest-product spad">
+    <div class="container">
+       
+            <div class="row">
+               
+                    <div class="col-lg-4 col-md-6">
+                        <div class="latest-product__text">
+                            <h4>Latest Products</h4>
+                            @{
+                                DataTable dtCategory = GetCatogires();
+                            }
+                            @foreach (DataRow itemCategory in dtCategory.Rows)
+                            {
+                                <div class="latest-product__slider owl-carousel">
+                                    @{
+                                        List<Product> products = Products(Convert.ToInt32(itemCategory["id"]));
+                                    }
+                                    @foreach (Product item in products)
+                                    {
+                                        <div class="latest-prdouct__slider__item">
+
+                                            <a href="/Product/Detail/@item.id" class="latest-product__item">
+                                                <div class="latest-product__item__pic">
+                                                    <img src="/Assets/Upload/Products/@item.photo" style="width:130px; height:100px;">
+                                                </div>
+                                                <div class="latest-product__item__text">
+                                                    <h6>@item.name</h6>
+                                                    <span>@string.Format("{0:C}", item.price)</span>
+                                                </div>
+                                            </a>
+
+                                        </div>
+                                        <div class="latest-prdouct__slider__item">
+                                            <a href="/Product/Detail/@item.id" class="latest-product__item">
+                                                <div class="latest-product__item__pic">
+                                                    <img src="/Assets/Upload/Products/@item.photo" style="width:130px; height:100px;">
+                                                </div>
+                                                <div class="latest-product__item__text">
+                                                    <h6>@item.name</h6>
+                                                    <span>@string.Format("{0:C}", item.price)</span>
+                                                </div>
+                                            </a>
+
+                                        </div>}
+                                </div>
+                                        }
+                            </div>
+                    </div>
+                
+            </div>
+       
+    </div>
+</section>
